@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Tabs, TabsContent } from './components/ui/tabs'
 import Header from './components/layout/Header'
-import Navigation from './components/layout/Navigation'
 import Home from './pages/Home'
 import Matchmaking from './pages/Matchmaking'
 import Gamification from './pages/Gamification'
@@ -13,15 +12,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header dengan Logo */}
-      <Header />
-      
-      {/* Navigation Tabs di bawah header */}
-      <div className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto">
-          <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
-        </div>
-      </div>
+      {/* Header dengan Navigation yang digabung */}
+      <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
