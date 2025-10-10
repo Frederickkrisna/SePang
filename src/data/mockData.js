@@ -16,13 +16,13 @@ export const venues = [
 export const matchProfiles = [
   {
     id: 1,
-    name: "Ahmad",
-    age: 25,
-    sport: "Futsal",
+    name: "Sebastian Darren",
+    age: 21,
+    sport: "Basketball",
     level: "Intermediate",
     distance: "1.2 km",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-    bio: "Suka main futsal setiap weekend. Cari tim yang solid!",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    bio: "Suka main basket setiap hari. Cari tim yang solid!",
     matchScore: 92
   },
   // ... data match profiles lainnya

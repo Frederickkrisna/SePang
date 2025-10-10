@@ -111,9 +111,9 @@ export default function Community() {
           <CardContent>
             <div className="space-y-3">
               {[
-                { rank: 1, name: "Ahmad S.", points: 2450, avatar: "AS" },
-                { rank: 2, name: "Sarah W.", points: 2280, avatar: "SW" },
-                { rank: 3, name: "Kevin L.", points: 2100, avatar: "KL" },
+                { rank: 1, name: "Frederick", points: 2450, avatar: "FR" },
+                { rank: 2, name: "Jemes", points: 2280, avatar: "JT" },
+                { rank: 3, name: "Jose Austin.", points: 2100, avatar: "JA" },
                 { rank: 4, name: "You (John D.)", points: 1750, avatar: "JD" }
               ].map(player => (
                 <div key={player.rank} className={`flex items-center gap-3 p-3 rounded-lg ${player.name.includes('You') ? 'bg-blue-50 border border-blue-200' : ''}`}>

@@ -113,9 +113,9 @@ export default function Matchmaking() {
           </CardHeader>
           <CardContent className="space-y-4">
             {[
-              { name: "Rahman", sport: "Futsal", status: "Played" },
-              { name: "Diana", sport: "Badminton", status: "Scheduled" },
-              { name: "Budi", sport: "Basketball", status: "Cancelled" }
+              { name: "Hasta", sport: "Futsal", status: "Played" },
+              { name: "Kael", sport: "Badminton", status: "Scheduled" },
+              { name: "Dustin", sport: "Basketball", status: "Cancelled" }
             ].map((match, index) => (
               <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
                 <div>
