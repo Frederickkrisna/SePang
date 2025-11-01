@@ -48,6 +48,52 @@
   }
 }
 
+.slider::-webkit-slider-thumb {
+    --appearance: none; 
+    --animation: 20px;
+    --width: 20px;
+    --border-radius: 50%;
+    --background: hsl(var(--primary));
+    --cursor: pointer;
+    --border: 2px solid white;
+    --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    --transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+    --transform: scale(1.1);
+    --animation: hsl(var(--primary) / 0.9); 
+}
+
+.slider::-moz-range-thumb {
+    --height: 20px;
+    --width: 20px;
+    --border-radius: 50%;
+    --background: hsl(var(--primary));
+    --cursor: pointer;
+    --border: 2px solid white;
+    --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    --transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+    --transform: scale(1.1);
+    --background: hsl(var(--primary) / 0.9);
+}
+
+.slider::-webkit-slider-track {
+    --background: hsl(var(--input));
+    --border-radius: 10px;
+    --height: 8px;
+}
+
+.slider::-moz-range-track {
+    --background: hsl(var(--input));
+    --border-radius: 10px;
+    --height: 8px;
+    --border: none;
+}
+
 @layer base {
   * {
     @apply border-border;
