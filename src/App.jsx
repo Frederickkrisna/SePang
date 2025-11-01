@@ -1,4 +1,3 @@
-// App.js - dengan React Router DOM
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import Header from './components/layout/Header'
@@ -51,10 +50,8 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header dengan Navigation */}
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* Main Content dengan Routes */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <Routes>
           <Route path="/" element={<Home />} />

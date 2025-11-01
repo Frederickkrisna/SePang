@@ -1,19 +1,16 @@
-// aiScheduler.js - Optimized for Palmerah, Jakarta Barat
 export class AISchedulerService {
   constructor() {
     this.isInitialized = false
     this.model = null
     this.userLocation = 'Palmerah, Jakarta Barat'
     this.userTime = null
-    
-    // Initialize methods
+
     this.predict = this.predict.bind(this)
     this.getRecommendations = this.getRecommendations.bind(this)
     this.analyzePreferences = this.analyzePreferences.bind(this)
     this.getTimeBasedSuggestions = this.getTimeBasedSuggestions.bind(this)
   }
 
-  // Initialize dengan location dan time
   async initializeModel(userLocation = 'Palmerah, Jakarta Barat') {
     console.log('🔄 Initializing AI Model for Palmerah...')
     
@@ -75,7 +72,6 @@ export class AISchedulerService {
     return 'low'
   }
 
-  // Dapatkan beberapa slot available berikutnya
   getNextAvailableSlots(currentHour, currentMinutes) {
     const allSlots = [
       '08:00', '09:00', '10:00', '11:00', 
@@ -137,7 +133,6 @@ export class AISchedulerService {
       'BSD City, Tangerang': 22.8,
       'Ciledug, Tangerang': 14.3,
       
-      // Default untuk venue yang tidak ada di mapping
       'default': 8.0
     }
     
@@ -151,14 +146,12 @@ export class AISchedulerService {
     return palmerahDistances['default']
   }
 
-  // Extract harga numerik dari string price
   extractPrice(priceString) {
     if (!priceString) return 0
     const numeric = priceString.replace(/[^\d]/g, '')
     return parseInt(numeric) || 0
   }
 
-  // Main method untuk mendapatkan rekomendasi
   async getRecommendations(userId, constraints = {}) {
     console.log(`🤖 Getting AI recommendations for Palmerah user: ${userId}`)
     
@@ -171,8 +164,7 @@ export class AISchedulerService {
 
     // Import venues data dari mockData
     const { venues } = await import('../data/mockData.js')
-    
-    // Simulasi AI processing
+
     await new Promise(resolve => setTimeout(resolve, 600))
 
     const recommendations = this.generatePalmerahRecommendations(venues, timeContext, userLocation, constraints)
@@ -181,7 +173,6 @@ export class AISchedulerService {
     return recommendations
   }
 
-  // Generate recommendations khusus Palmerah
   generatePalmerahRecommendations(venues, timeContext, userLocation, constraints) {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -194,10 +185,8 @@ export class AISchedulerService {
       return date.toLocaleDateString('id-ID', { weekday: 'long' })
     }
 
-    // Filter venues yang available
     const availableVenues = venues.filter(venue => venue.available)
 
-    // Calculate distances dan scores untuk semua venue
     const venuesWithScores = availableVenues.map(venue => {
       const distance = this.calculatePalmerahDistance(venue.location)
       const priceValue = this.extractPrice(venue.price)
@@ -211,7 +200,6 @@ export class AISchedulerService {
       else if (venue.location.includes('Jakarta Pusat') && distance < 6) locationPriority = 2
       else if (venue.location.includes('Jakarta Selatan') && distance < 8) locationPriority = 1.5
       
-      // Traffic multiplier - hindari venue jauh saat rush hour
       let trafficMultiplier = 1
       if (traffic === 'high' && distance > 8) trafficMultiplier = 0.7
       if (traffic === 'medium' && distance > 12) trafficMultiplier = 0.8
@@ -257,7 +245,6 @@ export class AISchedulerService {
     // Ambil 6 venue terbaik
     const bestVenues = sortedVenues.slice(0, 6)
 
-    // Generate recommendations
     const allRecommendations = []
     
     bestVenues.forEach((venue, index) => {
@@ -265,10 +252,9 @@ export class AISchedulerService {
       const slotIndex = index % timeSlots.length
       const timeSlot = timeSlots[slotIndex]
       
-      // Match score berdasarkan lokasi dan distance
       let matchScore
       if (venue.isPalmerahArea) {
-        matchScore = 98 // Maximum score untuk venue di Palmerah/Slipi
+        matchScore = 98
       } else if (venue.isJakartaBarat) {
         if (venue.distance < 3) matchScore = 95
         else if (venue.distance < 6) matchScore = 90
@@ -281,13 +267,11 @@ export class AISchedulerService {
         else if (venue.distance < 12) matchScore = 78
         else matchScore = 72
       }
-      
-      // Bonus untuk harga murah dan rating tinggi
+
       if (venue.priceValue < 100000) matchScore += 5
       if (venue.rating >= 4.5) matchScore += 4
       if (venue.rating >= 4.7) matchScore += 2
-      
-      // Bonus untuk fasilitas lengkap
+
       if (venue.facilities && venue.facilities.length >= 5) matchScore += 3
       
       matchScore = Math.min(98, Math.max(70, matchScore))
@@ -338,7 +322,6 @@ export class AISchedulerService {
     }
   }
 
-  // Generate reasons khusus Palmerah
   generatePalmerahReasons(venue, distance, timeContext) {
     const reasons = []
     
@@ -398,7 +381,6 @@ export class AISchedulerService {
     return reasons.slice(0, 4)
   }
 
-  // Get estimated travel time
   getEstimatedTravelTime(distance, traffic) {
     const baseTime = distance * 3 // 3 menit per km normal
     let multiplier = 1
@@ -410,7 +392,6 @@ export class AISchedulerService {
     return `${totalMinutes} menit`
   }
 
-  // Extract discount dari promo text
   extractDiscount(promo) {
     if (promo.includes('20%')) return '20%'
     if (promo.includes('10%')) return '10%'
@@ -419,7 +400,6 @@ export class AISchedulerService {
     return 'Promo'
   }
 
-  // Get time advantage description
   getTimeAdvantage(slotTime, currentHour) {
     const slotHour = parseInt(slotTime.split(':')[0])
     const hoursDifference = slotHour - currentHour
@@ -433,7 +413,6 @@ export class AISchedulerService {
     }
   }
 
-  // Get Palmerah location insights
   getPalmerahLocationInsights() {
     return {
       advantage: "Lokasi strategis di pusat Jakarta Barat",
@@ -444,7 +423,6 @@ export class AISchedulerService {
     }
   }
 
-  // Get time-based suggestions untuk Palmerah
   async getTimeBasedSuggestions() {
     const timeContext = this.getCurrentTimeContext()
     
@@ -458,7 +436,6 @@ export class AISchedulerService {
     return suggestions
   }
 
-  // Method untuk analyze user preferences
   async analyzePreferences(userId) {
     const timeContext = this.getCurrentTimeContext()
     
@@ -474,7 +451,6 @@ export class AISchedulerService {
     }
   }
 
-  // Prediction method
   async predict() {
     await new Promise(resolve => setTimeout(resolve, 400))
     
