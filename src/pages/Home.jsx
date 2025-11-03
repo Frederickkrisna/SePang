@@ -59,7 +59,6 @@ const extractPrice = (priceString) => {
     return parseInt(numeric) || 0
   }
 
-  // Fungsi untuk extract jarak numerik
   const extractDistance = (distanceString) => {
     if (!distanceString) return 0
     const numeric = distanceString.replace(/[^\d.]/g, '')
@@ -96,7 +95,6 @@ const extractPrice = (priceString) => {
       return matchesSearch && matchesSport && matchesDistance && matchesPrice && matchesRating
     })
 
-    // Cek apakah ada filter aktif
     const hasActiveFilters = maxDistance !== 'all' || priceRange !== 'all' || minRating !== 'all'
     setIsFilterActive(hasActiveFilters)
 
@@ -138,7 +136,7 @@ const extractPrice = (priceString) => {
       
       setAiRecommendations(recommendations)
       setCurrentRecommendationIndex(0)
-      console.log('✅ AI recommendations loaded')
+      console.log('AI recommendations loaded')
     } catch (error) {
       console.error('Error loading AI recommendations:', error)
     } finally {
@@ -150,6 +148,7 @@ const extractPrice = (priceString) => {
     if (userLocation === 'Palmerah, Jakarta Barat') {
       loadAIRecommendations()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userLocation])
 
   const handleViewOtherRecommendations = async () => {
@@ -272,7 +271,7 @@ const extractPrice = (priceString) => {
           </div>
         </div>
 
-        {/* Quick Search dengan Padding */}
+        {/* Quick Search */}
         <Card className="p-6">
           <CardContent className="p-0">
             <div className="flex gap-4 mb-6">
@@ -334,7 +333,7 @@ const extractPrice = (priceString) => {
               ))}
             </div>
 
-            {/* Additional Filters dengan animasi smooth */}
+            {/* Additional Filters */}
             <div className={`transition-all duration-300 ease-in-out overflow-hidden ${
               showFilters ? 'max-h-96 opacity-100 mt-6' : 'max-h-0 opacity-0'
             }`}>
@@ -400,7 +399,7 @@ const extractPrice = (priceString) => {
                   </div>
                 </div>
                 
-                {/* Filter Status dengan animasi */}
+                {/* Filter Status */}
                 {isFilterActive && (
                   <div className="mt-4 p-3 bg-white rounded-lg border border-green-200 animate-pulse">
                     <p className="text-sm font-medium text-green-800 mb-2">Filter Aktif:</p>
@@ -766,7 +765,6 @@ function AISchedulerContent({ recommendation, onViewOtherRecommendations, onRefr
   )
 }
 
-// QuickStats Component
 function QuickStats({ userLevel, userPoints, gamesThisWeek }) {
   return (
     <Card>
@@ -881,7 +879,7 @@ function ViewAllModal({ isOpen, onClose, venues, favoriteVenues, onToggleFavorit
                     </p>
                   )}
 
-                  {/* Facilities (jika ada) */}
+                  {/* Facilities */}
                   {venue.facilities && venue.facilities.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                       {venue.facilities.slice(0, 2).map((facility, index) => (
