@@ -1257,6 +1257,84 @@ export const bookingHistory = [
   }
 ];
 
+export const rewards = [
+  {
+    id: 'r1',
+    name: 'Voucher Diskon 50k',
+    description: 'Berlaku untuk semua venue partner',
+    pointsRequired: 500,
+    icon: 'Gift'
+  },
+  {
+    id: 'r2',
+    name: 'Jersey SePang Limited',
+    description: 'Koleksi eksklusif edisi terbatas',
+    pointsRequired: 2000,
+    icon: 'Shirt'
+  },
+  {
+    id: 'r3',
+    name: 'Gratis Booking 1 Jam',
+    description: 'Venue pilihan Anda',
+    pointsRequired: 1000,
+    icon: 'Zap'
+  },
+  {
+    id: 'r4',
+    name: 'Premium Membership 1 Bulan',
+    description: 'Akses fitur premium',
+    pointsRequired: 1500,
+    icon: 'Crown'
+  },
+  {
+    id: 'r5',
+    name: 'Sports Equipment Pack',
+    description: 'Perlengkapan olahraga lengkap',
+    pointsRequired: 3000,
+    icon: 'Target'
+  },
+  {
+    id: 'r6',
+    name: 'Personal Training Session',
+    description: 'Sesi latihan dengan trainer profesional',
+    pointsRequired: 2500,
+    icon: 'Users'
+  }
+]
+
+export const friends = [
+  {
+    id: 1,
+    name: "Alex Johnson",
+    skillLevel: "Intermediate",
+    lastActive: "2 jam lalu"
+  },
+  {
+    id: 2,
+    name: "Sarah Miller",
+    skillLevel: "Advanced",
+    lastActive: "1 hari lalu"
+  },
+  {
+    id: 3,
+    name: "Mike Chen",
+    skillLevel: "Beginner",
+    lastActive: "Online"
+  },
+  {
+    id: 4,
+    name: "Lisa Wang",
+    skillLevel: "Intermediate",
+    lastActive: "3 jam lalu"
+  },
+  {
+    id: 5,
+    name: "David Brown",
+    skillLevel: "Advanced",
+    lastActive: "2 hari lalu"
+  }
+];
+
 export default {
   venues,
   matchProfiles,
@@ -1266,5 +1344,7 @@ export default {
   sports,
   locations,
   aiRecommendations,
-  bookingHistory
+  bookingHistory,
+  rewards,
+  friends
 };
