@@ -15,8 +15,6 @@ export default function Gamification() {
   const [showAllRewards, setShowAllRewards] = useState(false)
   const [selectedReward, setSelectedReward] = useState(null)
   const [showRedeemModal, setShowRedeemModal] = useState(false)
-  
-  // State baru untuk Quick Actions
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false)
   const [showGoalModal, setShowGoalModal] = useState(false)
   const [weeklyGoal, setWeeklyGoal] = useState(3)
@@ -57,7 +55,6 @@ export default function Gamification() {
     }
   }
 
-  // Handler untuk Daily Check-in
   const handleDailyCheckIn = () => {
     if (!hasCheckedInToday) {
       setUserPoints(prev => prev + 10)
@@ -68,7 +65,6 @@ export default function Gamification() {
     }
   }
 
-  // Handler untuk Set Weekly Goal
   const handleSetWeeklyGoal = () => {
     setShowGoalModal(true)
   }
@@ -78,7 +74,6 @@ export default function Gamification() {
     alert(`Target mingguan disetel menjadi ${weeklyGoal} sesi!`)
   }
 
-  // Handler untuk Invite Friends
   const handleInviteFriends = () => {
     setShowInviteModal(true)
   }
@@ -107,11 +102,9 @@ export default function Gamification() {
   const displayedRewards = showAllRewards ? rewards : rewards.slice(0, 3)
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-6 py-1">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Player Stats */}
           <Card className="bg-gradient-to-br from-green-50 to-emerald-100 border-0 shadow-lg">
             <CardContent className="p-8">
               <div className="flex flex-col md:flex-row items-center gap-8">
@@ -124,7 +117,7 @@ export default function Gamification() {
                   </div>
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h2 className="text-3xl font-bold mb-2 text-gray-900">John Doe</h2>
+                  <h2 className="text-3xl font-semibold pt-4 mb-2 text-gray-900">John Doe</h2>
                   <Badge className="mb-6 px-4 py-2 text-sm bg-gradient-to-r from-yellow-400 to-yellow-500 text-white border-0">
                     🏆 Level {userLevel} Explorer
                   </Badge>
@@ -300,10 +293,9 @@ export default function Gamification() {
           </Card>
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-8">
           {/* Health Tracker */}
-          <Card className="shadow-lg border-0">
+          <Card className="shadow-lg border-gray-200">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-gray-900">
                 <Flame className="w-5 h-5 text-orange-500" />
