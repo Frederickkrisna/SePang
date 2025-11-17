@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Trophy, Users, Calendar, GamepadIcon as Game, X, Check, MapPin, Star } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Progress } from '@/components/ui/progress'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Button } from '../components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
+import { Badge } from '../components/ui/badge'
+import { Avatar, AvatarFallback } from '../components/ui/avatar'
+import { Progress } from '../components/ui/progress'
+import { Alert, AlertDescription } from '../components/ui/alert'
 
 export default function Community() {
   const [showNotification, setShowNotification] = useState(false)
@@ -89,7 +89,7 @@ export default function Community() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-1 md:p-1">
       {/* Notification Toast */}
       {showNotification && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top">

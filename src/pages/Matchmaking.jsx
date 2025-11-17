@@ -208,7 +208,7 @@ export default function Matchmaking() {
       {/* Main Content */}
       <div className="lg:col-span-2 space-y-6">
         <div className="text-center mb-8">
-          <h1 className="text-3xl mb-3">Cari Teman Sparing 🤝</h1>
+          <h1 className="text-3xl font-bold mb-3">Cari Teman Sparing 🤝</h1>
           <p className="text-gray-600 text-lg">Temukan lawan atau partner olahraga yang sesuai!</p>
         </div>
 
