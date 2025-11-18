@@ -95,7 +95,7 @@ export default function Header({ activeTab, setActiveTab }) {
               )}
               <Link to="/profile">
                 <Avatar className="w-8 h-8 border-2 border-green-200 cursor-pointer hover:scale-105 transition-transform">
-                  <AvatarFallback className="bg-green-100 text-green-600 font-medium">JD</AvatarFallback>
+                  <AvatarFallback className="bg-green-100 text-green-600 font-medium">FKS</AvatarFallback>
                 </Avatar>
               </Link>
             </div>

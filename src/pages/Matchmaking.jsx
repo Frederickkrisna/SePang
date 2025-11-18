@@ -197,7 +197,7 @@ export default function Matchmaking() {
   }
 
   const viewProfile = (match) => {
-    window.location.href = `/profile/${match.name.toLowerCase()}`
+    window.location.href = `/profile/${match.id}`
   }
 
   // Dapatkan messages untuk user yang sedang dipilih
@@ -270,7 +270,7 @@ export default function Matchmaking() {
                   <h4 className="text-lg mb-1">{profile.name}</h4>
                   <p className="text-gray-600 mb-2">{profile.sport} • {selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)}</p>
                   <Badge variant="outline" className="mb-3">
-                    {profile.matchScore}% Match
+                  {profile.matchScore}% Match
                   </Badge>
                   <p className="text-sm text-gray-500 mb-4">📍 Jakarta</p>
                   <Button 
@@ -284,7 +284,6 @@ export default function Matchmaking() {
               </Card>
             ))}
             
-            {/* Scheduled Matches dengan tanggal & jam */}
             {[
               { 
                 id: "kael-1",
@@ -315,56 +314,56 @@ export default function Matchmaking() {
                 time: "14:00 WIB",
                 matchScore: 72,
                 avatar: null
-              }
-            ].map((match) => (
-              <Card key={match.id} className="text-center hover:shadow-lg transition-shadow cursor-pointer border-blue-200">
-                <CardContent className="p-6">
-                  <div className="mb-6">
-                    <Avatar className="w-20 h-20 mx-auto">
-                      {match.avatar ? (
-                        <AvatarImage src={match.avatar} />
-                      ) : (
-                        <AvatarFallback className="text-lg bg-blue-100 text-blue-600">
-                          {match.name[0]}
-                        </AvatarFallback>
-                      )}
-                    </Avatar>
-                  </div>
-                  
-                  <h4 className="text-lg mb-1">{match.name}</h4>
-                  <p className="text-gray-600 mb-2">{match.sport} • Intermediate</p>
-                  <Badge variant="secondary" className="mb-3">
-                    {match.matchScore}% Match
-                  </Badge>
-                  
-                  <div className="bg-blue-50 rounded-lg p-3 mb-4">
-                    <p className="text-sm font-medium text-blue-800">{match.day}</p>
-                    <p className="text-sm text-blue-600">{match.date}</p>
-                    <p className="text-sm font-semibold text-blue-800">{match.time}</p>
-                  </div>
-                  
-                  <p className="text-sm text-gray-500 mb-4">📍 Jakarta</p>
-                  
-                  {/* Dua Button: Lihat Detail dan Chat */}
-                  <div className="space-y-2">
-                    <Button 
-                      variant="outline" 
-                      className="w-full border-blue-300 text-blue-600 hover:bg-blue-50"
-                      onClick={() => viewProfile(match)}
-                    >
-                      Lihat Detail
-                    </Button>
-                    <Button 
-                      className="w-full bg-green-500 hover:bg-green-600 text-white"
-                      onClick={() => openChatWithMatch(match)}
-                    >
-                      <MessageCircle className="w-4 h-4 mr-2" />
-                      Chat
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+              },
+              ].map((match) => (
+                // Kode kartu tetap sama
+                <Card key={match.id} className="text-center hover:shadow-lg transition-shadow cursor-pointer border-blue-200">
+                  <CardContent className="p-6">
+                    <div className="mb-6">
+                      <Avatar className="w-20 h-20 mx-auto">
+                        {match.avatar ? (
+                          <AvatarImage src={match.avatar} />
+                        ) : (
+                          <AvatarFallback className="text-lg bg-blue-100 text-blue-600">
+                            {match.name[0]}
+                          </AvatarFallback>
+                        )}
+                      </Avatar>
+                    </div>
+                    
+                    <h4 className="text-lg mb-1">{match.name}</h4>
+                    <p className="text-gray-600 mb-2">{match.sport} • Intermediate</p>
+                    <Badge variant="secondary" className="mb-3">
+                      {match.matchScore}% Match
+                    </Badge>
+                    
+                    <div className="bg-blue-50 rounded-lg p-3 mb-4">
+                      <p className="text-sm font-medium text-blue-800">{match.day}</p>
+                      <p className="text-sm text-blue-600">{match.date}</p>
+                      <p className="text-sm font-semibold text-blue-800">{match.time}</p>
+                    </div>
+                    
+                    <p className="text-sm text-gray-500 mb-4">📍 Jakarta</p>
+                    
+                    <div className="space-y-2">
+                      <Button 
+                        variant="outline" 
+                        className="w-full border-blue-300 text-blue-600 hover:bg-blue-50"
+                        onClick={() => viewProfile(match)}
+                      >
+                        Lihat Detail
+                      </Button>
+                      <Button 
+                        className="w-full bg-green-500 hover:bg-green-600 text-white"
+                        onClick={() => openChatWithMatch(match)}
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Chat
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
           </div>
         </div>
       </div>

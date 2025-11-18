@@ -21,6 +21,7 @@ function AppContent() {
     if (path === '/match-partner') return 'match'
     if (path === '/tournaments') return 'match'
     if (path === '/my-bookings') return 'profile'
+    if (path.startsWith('/profile/')) return 'profile'
     return 'home'
   }
 
@@ -59,6 +60,7 @@ function AppContent() {
           <Route path="/rewards" element={<Gamification />} />
           <Route path="/community" element={<Community />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Routes>
       </div>
     </div>
