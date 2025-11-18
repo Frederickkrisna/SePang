@@ -5,8 +5,7 @@ import { Badge } from "../ui/badge";
 
 const availableSports = [
   "Futsal", "Badminton", "Basketball", "Tennis", "Voli", 
-  "Sepak Bola", "Renang", "Lari", "Golf", "Bulu Tangkis",
-  "Padel","Rock Climbing","Hiking"
+  "Tenis meja","Padel","Golf","Renang", "Sepak Bola", "Rock Climbing"
 ];
 
 const skillLevels = [
@@ -104,7 +103,7 @@ export default function PreferencesEditor({
                         variant={selectedLevel === level.value ? "default" : "outline"}
                         className={`flex-1 ${
                           selectedLevel === level.value 
-                            ? "bg-blue-500 hover:bg-blue-600" 
+                            ? "bg-green-500 hover:bg-green-600" 
                             : "hover:bg-gray-100"
                         }`}
                         onClick={() => setSelectedLevel(level.value)}

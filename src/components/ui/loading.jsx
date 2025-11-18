@@ -21,9 +21,9 @@ export function LoadingSpinner({ size = "default", text = "Loading..." }) {
 
 export function AILoadingScheduler() {
   return (
-    <div className="bg-gradient-to-br from-green-50 to-green-50 rounded-lg p-6 border border-green-200">
+    <div className="bg-gradient-to-br from-green-50 to-green-50 rounded-lg p-6 mt-3 border border-green-200">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-green-800">AI Smart Scheduler</h3>
+        <h3 className="font-semibold text-green-800">AI Smart Recommendations</h3>
         <div className="flex space-x-1">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce"></div>
           <div className="w-2 h-2 bg-green-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>

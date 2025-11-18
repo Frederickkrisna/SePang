@@ -823,9 +823,9 @@ export const venues = [
 export const matchProfiles = [
   {
     id: 1,
-    name: "Sebastian Darren",
-    age: 21,
-    sport: "Basketball",
+    name: "Sebastian",
+    age: 53,
+    sport: "Badminton",
     level: "Intermediate",
     distance: "1.2 km",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
@@ -1002,7 +1002,7 @@ export const events = [
 
 export const userData = {
   id: 'user123',
-  name: 'John Doe',
+  name: 'Frederick Krisna',
   level: 12,
   points: 1750,
   avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',

@@ -1,41 +1,7 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
 import { Bell, Calendar, Heart, Star, Trophy, Users, Smartphone, ChevronRight } from 'lucide-react'
 
 export default function Profile() {
-  const { id } = useParams()
-  //Data dummy
-  const userData = {
-    "kael-1": {
-      name: "Kael",
-      initials: "K",
-      sport: "Badminton",
-      level: "Intermediate",
-      joinDate: "January 2024"
-    },
-    "rizky-1": {
-      name: "Rizky", 
-      initials: "R",
-      sport: "Futsal",
-      level: "Intermediate", 
-      joinDate: "February 2024"
-    },
-    "andi-1": {
-      name: "Andi",
-      initials: "A", 
-      sport: "Basketball",
-      level: "Intermediate",
-      joinDate: "March 2024"
-    }
-  }
-  
-  const user = userData[id] || {
-    name: "User Not Found",
-    initials: "?",
-    sport: "Unknown",
-    level: "Unknown",
-    joinDate: "Unknown"
-  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
       <div className="max-w-7xl mx-auto">
@@ -50,14 +16,14 @@ export default function Profile() {
                 <div className="flex items-center gap-8">
                   <div className="relative">
                     <div className="w-32 h-32 border-4 border-white shadow-2xl rounded-full bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-white text-3xl font-bold">
-                      FKS
+                      FK
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-yellow-400 rounded-full p-2 shadow-lg">
                       <Trophy className="w-5 h-5 text-yellow-900" />
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h2 className="text-3xl font-bold text-white mb-1">Frederick Krisna Suryopranoto</h2>
+                    <h2 className="text-3xl font-bold text-white mb-1">Frederick Krisna</h2>
                     <p className="text-emerald-100 mb-5 flex items-center gap-2">
                       <span className="bg-white/20 px-3 py-1 rounded-full text-sm">Pro Member</span>
                       <span>• Since January 2024</span>
@@ -196,8 +162,8 @@ export default function Profile() {
               </div>
               <div className="space-y-4 p-6">
                 {[
-                  { sport: "Futsal", games: 45, percentage: 65, color: "from-blue-500 to-cyan-500" },
-                  { sport: "Badminton", games: 32, percentage: 25, color: "from-purple-500 to-pink-500" },
+                  { sport: "Badminton", games: 45, percentage: 65, color: "from-blue-500 to-cyan-500" },
+                  { sport: "Futsal", games: 32, percentage: 25, color: "from-purple-500 to-pink-500" },
                   { sport: "Basketball", games: 15, percentage: 10, color: "from-orange-500 to-red-500" }
                 ].map((sport, index) => (
                   <div key={index} className="p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
@@ -243,6 +209,5 @@ export default function Profile() {
         </div>
       </div>
     </div>
-    
   )
 }
