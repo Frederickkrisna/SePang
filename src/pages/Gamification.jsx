@@ -3,7 +3,7 @@ import { Target, Medal, Trophy, Users, Zap, ArrowRight, Gift, Star, Crown, Flame
 
 export default function Gamification() {
   const [userPoints, setUserPoints] = useState(1750)
-  const [userLevel, setUserLevel] = useState(12)
+  const [userLevel] = useState(12)
   const [showAllAchievements, setShowAllAchievements] = useState(false)
   const [showAllRewards, setShowAllRewards] = useState(false)
   const [selectedReward, setSelectedReward] = useState(null)
