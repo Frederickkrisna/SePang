@@ -538,7 +538,7 @@ export default function Matchmaking() {
               <CardHeader className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-t-2xl">
                 <CardTitle className="text-white flex items-center gap-2">
                   <Zap className="w-5 h-5" />
-                  Preferensi Matching
+                  Matching Preferences
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 mt-3 space-y-6">
@@ -580,7 +580,7 @@ export default function Matchmaking() {
               <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b">
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-green-500" />
-                  Pertandingan Sebelumnya
+                  Recent Matches
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 mt-4 space-y-4">
@@ -620,20 +620,20 @@ export default function Matchmaking() {
               <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b">
                 <CardTitle className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-500" />
-                  Statistika
+                  Statistics
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 mt-4 space-y-4">
                 <div className="flex justify-between items-center p-3 bg-green-50 rounded-xl">
-                  <span className="text-gray-700 font-medium">Total Pertandingan</span>
+                  <span className="text-gray-700 font-medium">Total Matches</span>
                   <span className="text-2xl font-bold text-green-600">24</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
-                  <span className="text-gray-700 font-medium">Persentase Kemenangan</span>
+                  <span className="text-gray-700 font-medium">Success Rate</span>
                   <span className="text-2xl font-bold text-blue-600">85%</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-purple-50 rounded-xl">
-                  <span className="text-gray-700 font-medium">Rata-Rata Score Pertandingan</span>
+                  <span className="text-gray-700 font-medium">Average Match Score</span>
                   <span className="text-2xl font-bold text-purple-600">78%</span>
                 </div>
               </CardContent>

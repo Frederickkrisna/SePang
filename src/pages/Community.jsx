@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Trophy, Users, Calendar, Gamepad2, X, Check, MapPin, Zap, Crown, ChevronDown, ChevronUp } from 'lucide-react'
+import { Trophy, Users, Calendar, Gamepad2, X, Check, MapPin, Zap, Crown, ChevronDown, ChevronUp, DollarSign } from 'lucide-react'
 
 export default function Community() {
   const [showNotification, setShowNotification] = useState(false)
@@ -14,10 +14,14 @@ export default function Community() {
     date: '',
     location: '',
     maxParticipants: '',
+    entryFee: '', // Tambah field biaya masuk
     prize: ''
   })
 
-  const events = [
+  // State untuk events yang dibuat user
+  const [userCreatedEvents, setUserCreatedEvents] = useState([])
+
+  const defaultEvents = [
     {
       id: 1,
       title: "Liga Futsal Mingguan",
@@ -27,8 +31,10 @@ export default function Community() {
       maxParticipants: 32,
       prize: "Trophy + Rp 2.000.000",
       location: "GOR Senayan, Jakarta",
-      fee: "Rp 100.000/team",
-      color: "from-green-500 to-emerald-500"
+      entryFee: "Rp 100.000", // Biaya per orang
+      feeType: "tournament",
+      color: "from-green-500 to-emerald-500",
+      createdBy: "system"
     },
     {
       id: 2,
@@ -39,8 +45,10 @@ export default function Community() {
       maxParticipants: 64,
       prize: "Trophy + Rp 5.000.000",
       location: "Istora Senayan, Jakarta",
-      fee: "Rp 150.000/person",
-      color: "from-emerald-500 to-teal-500"
+      entryFee: "Rp 150.000",
+      feeType: "tournament",
+      color: "from-emerald-500 to-teal-500",
+      createdBy: "system"
     },
     {
       id: 3,
@@ -51,8 +59,10 @@ export default function Community() {
       maxParticipants: 16,
       prize: "Trophy + Rp 3.000.000",
       location: "Lapangan Basket Gelora Bung Karno",
-      fee: "Rp 200.000/team",
-      color: "from-teal-500 to-cyan-500"
+      entryFee: "Rp 200.000",
+      feeType: "tournament",
+      color: "from-teal-500 to-cyan-500",
+      createdBy: "system"
     },
     {
       id: 4,
@@ -63,13 +73,32 @@ export default function Community() {
       maxParticipants: 32,
       prize: "Trophy + Rp 4.000.000",
       location: "Senayan Tennis Court",
-      fee: "Rp 250.000/person",
-      color: "from-cyan-500 to-blue-500"
+      entryFee: "Rp 250.000",
+      feeType: "tournament",
+      color: "from-cyan-500 to-blue-500",
+      createdBy: "system"
+    },
+    {
+      id: 5,
+      title: "Weekend Badminton Gathering",
+      sport: "Badminton",
+      date: "Nov 24, 2024",
+      participants: 12,
+      maxParticipants: 20,
+      prize: "Fun & Networking",
+      location: "Badminton Court Kemang",
+      entryFee: "Rp 75.000",
+      feeType: "gathering",
+      color: "from-blue-500 to-indigo-500",
+      createdBy: "system"
     }
   ]
 
+  // Gabungkan default events dengan user created events
+  const allEvents = [...defaultEvents, ...userCreatedEvents]
+
   // Tampilkan hanya 2 event pertama, kecuali jika showAllEvents true
-  const displayedEvents = showAllEvents ? events : events.slice(0, 2)
+  const displayedEvents = showAllEvents ? allEvents : allEvents.slice(0, 2)
 
   const handleJoinEvent = (event) => {
     if (event.participants >= event.maxParticipants) {
@@ -80,7 +109,7 @@ export default function Community() {
     }
 
     setJoinedEvents(prev => new Set([...prev, event.id]))
-    setNotificationMessage(`Berhasil join ${event.title}!`)
+    setNotificationMessage(`Berhasil join ${event.title}! Biaya: ${event.entryFee}`)
     setShowNotification(true)
     setTimeout(() => setShowNotification(false), 2000)
   }
@@ -91,14 +120,99 @@ export default function Community() {
   }
 
   const handleSubmitEvent = () => {
-    if (!formData.name || !formData.sport || !formData.date || !formData.location || !formData.maxParticipants) {
+    if (!formData.name || !formData.sport || !formData.date || !formData.location || !formData.maxParticipants || !formData.entryFee) {
+      setNotificationMessage('Harap isi semua field yang wajib!')
+      setShowNotification(true)
+      setTimeout(() => setShowNotification(false), 2000)
       return
     }
+
+    // Validasi biaya masuk
+    if (!formData.entryFee.match(/^Rp\s?\d+\.?\d*/)) {
+      setNotificationMessage('Format biaya masuk harus seperti: Rp 100.000')
+      setShowNotification(true)
+      setTimeout(() => setShowNotification(false), 2000)
+      return
+    }
+
+    // Generate ID baru untuk event
+    const newEventId = Date.now()
+    
+    // Format date untuk display
+    const formattedDate = new Date(formData.date).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    })
+
+    // Tentukan warna berdasarkan sport
+    const getColorBySport = (sport) => {
+      const colorMap = {
+        'futsal': 'from-green-500 to-emerald-500',
+        'badminton': 'from-emerald-500 to-teal-500',
+        'basketball': 'from-teal-500 to-cyan-500',
+        'tennis': 'from-cyan-500 to-blue-500',
+        'voli': 'from-blue-500 to-indigo-500',
+        'Tenis Meja': 'from-indigo-500 to-purple-500',
+        'Padel': 'from-purple-500 to-pink-500',
+        'Golf': 'from-pink-500 to-rose-500',
+        'Renang': 'from-rose-500 to-red-500',
+        'Sepak Bola': 'from-red-500 to-orange-500',
+        'Rock Climbing': 'from-orange-500 to-amber-500'
+      }
+      return colorMap[sport.toLowerCase()] || 'from-green-500 to-emerald-500'
+    }
+
+    // Buat event object baru
+    const newEvent = {
+      id: newEventId,
+      title: formData.name,
+      sport: formData.sport.charAt(0).toUpperCase() + formData.sport.slice(1),
+      date: formattedDate,
+      participants: 1, // Creator otomatis join
+      maxParticipants: parseInt(formData.maxParticipants),
+      prize: eventType === 'tournament' ? (formData.prize || "Trophy + Hadiah Menarik") : "Fun & Networking",
+      location: formData.location,
+      entryFee: formData.entryFee,
+      feeType: eventType,
+      color: getColorBySport(formData.sport),
+      createdBy: "user",
+      isUserCreated: true,
+      rawDate: formData.date // Simpan untuk sorting
+    }
+
+    // Tambahkan event baru ke state
+    setUserCreatedEvents(prev => [newEvent, ...prev])
+    
+    // Auto join event yang dibuat
+    setJoinedEvents(prev => new Set([...prev, newEventId]))
+
+    // Reset form dan close modal
     setShowCreateEventModal(false)
-    setNotificationMessage(`${eventType === 'tournament' ? 'Tournament' : 'Gathering'} berhasil dibuat!`)
+    setFormData({ name: '', sport: '', date: '', location: '', maxParticipants: '', entryFee: '', prize: '' })
+    
+    // Show success notification
+    setNotificationMessage(`${eventType === 'tournament' ? 'Tournament' : 'Gathering'} "${formData.name}" berhasil dibuat!`)
     setShowNotification(true)
-    setTimeout(() => setShowNotification(false), 2000)
-    setFormData({ name: '', sport: '', date: '', location: '', maxParticipants: '', prize: '' })
+    setTimeout(() => setShowNotification(false), 3000)
+  }
+
+  // Format biaya untuk placeholder
+  const getFeePlaceholder = (sport, type) => {
+    const feeMap = {
+      'futsal': type === 'tournament' ? 'Rp 100.000' : 'Rp 50.000',
+      'badminton': type === 'tournament' ? 'Rp 150.000' : 'Rp 75.000',
+      'basketball': type === 'tournament' ? 'Rp 200.000' : 'Rp 100.000',
+      'tennis': type === 'tournament' ? 'Rp 250.000' : 'Rp 125.000',
+      'voli': type === 'tournament' ? 'Rp 120.000' : 'Rp 60.000',
+      'Tenis Meja': type === 'tournament' ? 'Rp 80.000' : 'Rp 40.000',
+      'Padel': type === 'tournament' ? 'Rp 180.000' : 'Rp 90.000',
+      'Golf': type === 'tournament' ? 'Rp 300.000' : 'Rp 150.000',
+      'Renang': type === 'tournament' ? 'Rp 100.000' : 'Rp 50.000',
+      'Sepak Bola': type === 'tournament' ? 'Rp 250.000' : 'Rp 125.000',
+      'Rock Climbing': type === 'tournament' ? 'Rp 120.000' : 'Rp 60.000'
+    }
+    return feeMap[sport] || (type === 'tournament' ? 'Rp 100.000' : 'Rp 50.000')
   }
 
   return (
@@ -115,115 +229,141 @@ export default function Community() {
         </div>
       )}
 
-      {/* Create Event Modal */}
       {showCreateEventModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 text-white">
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-bold">Buat {eventType === 'tournament' ? 'Tournament' : 'Gathering'}</h3>
-                <button 
-                  onClick={() => setShowCreateEventModal(false)}
-                  className="bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-700">Nama Event</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan nama event"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-700">Olahraga</label>
-                <select 
-                  value={formData.sport}
-                  onChange={(e) => setFormData({...formData, sport: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
-                >
-                  <option value="">Pilih olahraga</option>
-                  <option value="futsal">Futsal</option>
-                  <option value="badminton">Badminton</option>
-                  <option value="basketball">Basketball</option>
-                  <option value="tennis">Tennis</option>
-                  <option value="voli">Voli</option>
-                  <option value="Tenis Meja">Tenis Meja</option>
-                  <option value="Padel">Padel</option>
-                  <option value="Golf">Golf</option>
-                  <option value="Renang">Renang</option>
-                  <option value="Sepak Bola">Sepak Bola</option>
-                  <option value="Rock Climbing">Rock Climbing</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-700">Tanggal</label>
-                <input
-                  type="date"
-                  min={new Date().toISOString().split('T')[0]}
-                  value={formData.date}
-                  onChange={(e) => setFormData({...formData, date: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-700">Lokasi</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan lokasi"
-                  value={formData.location}
-                  onChange={(e) => setFormData({...formData, location: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-700">Maksimal Peserta</label>
-                <input
-                  type="number"
-                  min="4"
-                  max="100"
-                  placeholder="16"
-                  value={formData.maxParticipants}
-                  onChange={(e) => setFormData({...formData, maxParticipants: e.target.value})}
-                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
-                />
-              </div>
-              {eventType === 'tournament' && (
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-700">Hadiah</label>
-                  <input
-                    type="text"
-                    placeholder="Trophy + Rp 1.000.000"
-                    value={formData.prize}
-                    onChange={(e) => setFormData({...formData, prize: e.target.value})}
-                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
-                  />
-                </div>
-              )}
-              <div className="flex gap-3 pt-4">
-                <button 
-                  onClick={handleSubmitEvent}
-                  className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-3 rounded-xl shadow-lg transition-all"
-                >
-                  Buat Event
-                </button>
-                <button 
-                  onClick={() => setShowCreateEventModal(false)} 
-                  className="flex-1 border-2 border-gray-300 hover:bg-gray-50 font-semibold py-3 rounded-xl transition-all"
-                >
-                  Batal
-                </button>
-              </div>
-            </div>
-          </div>
+  <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="w-full max-w-md max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="flex-shrink-0 bg-gradient-to-r from-green-500 to-emerald-500 p-6 text-white">
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-bold">Buat {eventType === 'tournament' ? 'Tournament' : 'Gathering'}</h3>
+          <button 
+            onClick={() => setShowCreateEventModal(false)}
+            className="bg-white/20 hover:bg-white/30 p-2 rounded-full transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
-      )}
+      </div>
+      
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-6 space-y-4">
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-gray-700">Nama Event *</label>
+            <input
+              type="text"
+              placeholder="Masukkan nama event"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-gray-700">Olahraga *</label>
+            <select 
+              value={formData.sport}
+              onChange={(e) => setFormData({...formData, sport: e.target.value})}
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
+            >
+              <option value="">Pilih olahraga</option>
+              <option value="futsal">Futsal</option>
+              <option value="badminton">Badminton</option>
+              <option value="basketball">Basketball</option>
+              <option value="tennis">Tennis</option>
+              <option value="voli">Voli</option>
+              <option value="Tenis Meja">Tenis Meja</option>
+              <option value="Padel">Padel</option>
+              <option value="Golf">Golf</option>
+              <option value="Renang">Renang</option>
+              <option value="Sepak Bola">Sepak Bola</option>
+              <option value="Rock Climbing">Rock Climbing</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-gray-700">Tanggal *</label>
+            <input
+              type="date"
+              min={new Date().toISOString().split('T')[0]}
+              value={formData.date}
+              onChange={(e) => setFormData({...formData, date: e.target.value})}
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-gray-700">Lokasi *</label>
+            <input
+              type="text"
+              placeholder="Masukkan lokasi"
+              value={formData.location}
+              onChange={(e) => setFormData({...formData, location: e.target.value})}
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-gray-700">Maksimal Peserta *</label>
+            <input
+              type="number"
+              min="4"
+              max="100"
+              placeholder="16"
+              value={formData.maxParticipants}
+              onChange={(e) => setFormData({...formData, maxParticipants: e.target.value})}
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
+            />
+          </div>
+          
+          {/* Biaya Masuk */}
+          <div>
+            <label className="block text-sm font-semibold mb-2 text-gray-700">
+              Biaya Masuk per Orang *
+            </label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder={getFeePlaceholder(formData.sport, eventType)}
+                value={formData.entryFee}
+                onChange={(e) => setFormData({...formData, entryFee: e.target.value})}
+                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Format: Rp 100.000 (per orang)
+            </p>
+          </div>
+
+          {eventType === 'tournament' && (
+            <div>
+              <label className="block text-sm font-semibold mb-2 text-gray-700">Prize Pool *</label>
+              <input
+                type="text"
+                placeholder="Trophy + Rp 1.000.000"
+                value={formData.prize}
+                onChange={(e) => setFormData({...formData, prize: e.target.value})}
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 focus:outline-none transition-all"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <div className="flex-shrink-0 border-t border-gray-200 p-6 bg-white">
+        <div className="flex gap-3">
+          <button 
+            onClick={handleSubmitEvent}
+            className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-semibold py-3 rounded-xl shadow-lg transition-all"
+          >
+            Buat Event
+          </button>
+          <button 
+            onClick={() => setShowCreateEventModal(false)} 
+            className="flex-1 border-2 border-gray-300 hover:bg-gray-50 font-semibold py-3 rounded-xl transition-all"
+          >
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -238,11 +378,16 @@ export default function Community() {
                 <p className="text-white/90 text-lg md:text-xl mb-6">Bergabung dengan turnamen dan event seru di Jakarta!</p>
                 <div className="flex flex-wrap gap-4">
                   <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
-                    <p className="text-white font-semibold">{events.length} Active Events</p>
+                    <p className="text-white font-semibold">{allEvents.length} Active Events</p>
                   </div>
                   <div className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-full border border-white/30">
                     <p className="text-white font-semibold">12.5K Members</p>
                   </div>
+                  {userCreatedEvents.length > 0 && (
+                    <div className="bg-yellow-500/20 backdrop-blur-sm px-6 py-3 rounded-full border border-yellow-300/30">
+                      <p className="text-yellow-200 font-semibold">{userCreatedEvents.length} Event Anda</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -251,13 +396,13 @@ export default function Community() {
             <div>
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                  Event Aktif {!showAllEvents && `(${displayedEvents.length}/${events.length})`}
+                  Active Events {!showAllEvents && `(${displayedEvents.length}/${allEvents.length})`}
                 </h3>
                 <button 
                   className="text-green-600 hover:text-green-700 font-semibold flex items-center gap-2 hover:gap-3 transition-all"
                   onClick={() => setShowAllEvents(!showAllEvents)}
                 >
-                  {showAllEvents ? 'Show Less' : `View All Events (${events.length})`}
+                  {showAllEvents ? 'Show Less' : `View All Events (${allEvents.length})`}
                   {showAllEvents ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
               </div>
@@ -266,15 +411,31 @@ export default function Community() {
                   const isFull = event.participants >= event.maxParticipants
                   const isJoined = joinedEvents.has(event.id)
                   const progress = (event.participants / event.maxParticipants) * 100
+                  const isUserCreated = event.isUserCreated
+                  const isTournament = event.feeType === 'tournament'
                   
                   return (
-                    <div key={event.id} className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all hover:scale-[1.02] overflow-hidden group border border-gray-100">
+                    <div key={event.id} className={`bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all hover:scale-[1.02] overflow-hidden group border-2 ${
+                      isUserCreated ? 'border-yellow-300' : 'border-gray-100'
+                    } relative`}>
+                      {isUserCreated && (
+                        <div className="absolute top-4 left-4 z-10">
+                          <div className="bg-gradient-to-r from-yellow-400 to-amber-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                            <Zap className="w-3 h-3" />
+                            Event Anda
+                          </div>
+                        </div>
+                      )}
                       <div className={`h-2 bg-gradient-to-r ${event.color}`}></div>
                       <div className="p-6">
                         <div className="flex flex-col md:flex-row gap-6">
                           <div className={`hidden md:block w-24 h-24 bg-gradient-to-br ${event.color} rounded-2xl flex-shrink-0 relative overflow-hidden group-hover:scale-110 transition-transform`}>
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <Trophy className="w-12 h-12 text-white" />
+                              {isTournament ? (
+                                <Trophy className="w-12 h-12 text-white" />
+                              ) : (
+                                <Users className="w-12 h-12 text-white" />
+                              )}
                             </div>
                           </div>
                           
@@ -282,9 +443,18 @@ export default function Community() {
                             <div className="flex flex-wrap justify-between items-start gap-3 mb-4">
                               <div>
                                 <h4 className="text-2xl font-bold mb-2 text-gray-800">{event.title}</h4>
-                                <span className={`inline-block px-4 py-1.5 bg-gradient-to-r ${event.color} text-white rounded-full text-sm font-semibold shadow-md`}>
-                                  {event.sport}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className={`inline-block px-4 py-1.5 bg-gradient-to-r ${event.color} text-white rounded-full text-sm font-semibold shadow-md`}>
+                                    {event.sport}
+                                  </span>
+                                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                                    isTournament 
+                                      ? 'bg-gradient-to-r from-yellow-400 to-amber-400 text-white' 
+                                      : 'bg-gradient-to-r from-blue-400 to-indigo-400 text-white'
+                                  }`}>
+                                    {isTournament ? '🏆 Tournament' : '👥 Gathering'}
+                                  </span>
+                                </div>
                               </div>
                               <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-full border border-green-200">
                                 <Calendar className="w-4 h-4 text-green-600" />
@@ -313,17 +483,38 @@ export default function Community() {
                                 </div>
                               </div>
                               
-                              <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl p-4 border-2 border-yellow-200">
+                              {/* Event Type Section */}
+                              <div className={`rounded-xl p-4 border-2 ${
+                                isTournament 
+                                  ? 'bg-gradient-to-br from-yellow-50 to-amber-50 border-yellow-200' 
+                                  : 'bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200'
+                              }`}>
                                 <div className="flex items-center gap-2 mb-1">
-                                  <Trophy className="w-5 h-5 text-yellow-600" />
-                                  <span className="font-bold text-yellow-900">Prize Pool</span>
+                                  {isTournament ? (
+                                    <Trophy className="w-5 h-5 text-yellow-600" />
+                                  ) : (
+                                    <Users className="w-5 h-5 text-blue-600" />
+                                  )}
+                                  <span className={`font-bold ${
+                                    isTournament ? 'text-yellow-900' : 'text-blue-900'
+                                  }`}>
+                                    {isTournament ? 'Prize Pool' : 'Event Type'}
+                                  </span>
                                 </div>
-                                <p className="text-yellow-800 font-bold text-lg">{event.prize}</p>
+                                <p className={`font-bold text-lg ${
+                                  isTournament ? 'text-yellow-800' : 'text-blue-800'
+                                }`}>
+                                  {event.prize}
+                                </p>
                               </div>
                               
+                              {/* Biaya Masuk Section */}
                               <div className="flex items-center justify-between bg-green-50 p-3 rounded-xl border border-green-200">
-                                <span className="text-gray-700 font-medium">Biaya pendaftaran:</span>
-                                <span className="font-bold text-green-600 text-lg">{event.fee}</span>
+                                <div className="flex items-center gap-2">
+                                  <DollarSign className="w-4 h-4 text-green-600" />
+                                  <span className="text-gray-700 font-medium">Biaya Masuk:</span>
+                                </div>
+                                <span className="font-bold text-green-600 text-lg">{event.entryFee} / orang</span>
                               </div>
                             </div>
                             
@@ -338,7 +529,7 @@ export default function Community() {
                               disabled={isFull || isJoined}
                               onClick={() => handleJoinEvent(event)}
                             >
-                              {isJoined ? '✓ Sudah Terdaftar' : isFull ? 'Event Penuh' : 'Join Event Now!'}
+                              {isJoined ? '✓ Sudah Terdaftar' : isFull ? 'Event Penuh' : `Join Event - ${event.entryFee}`}
                             </button>
                           </div>
                         </div>
@@ -391,8 +582,8 @@ export default function Community() {
                 <div className="space-y-3">
                   {[
                     { user: "Ahmad", action: "won Liga Futsal Mingguan", time: "2 hours ago", avatar: "A", color: "from-green-500 to-emerald-500" },
-                    { user: "Sarah", action: "joined Tournament Badminton", time: "4 hours ago", avatar: "S", color: "from-emerald-500 to-teal-500" },
-                    { user: "Kevin", action: "created new Basketball event", time: "6 hours ago", avatar: "K", color: "from-teal-500 to-cyan-500" },
+                    { user: "Sarah", action: "joined Badminton Gathering", time: "4 hours ago", avatar: "S", color: "from-emerald-500 to-teal-500" },
+                    { user: "Kevin", action: "created new Basketball Tournament", time: "6 hours ago", avatar: "K", color: "from-teal-500 to-cyan-500" },
                     { user: "Diana", action: "achieved 'Community Builder' badge", time: "8 hours ago", avatar: "D", color: "from-cyan-500 to-blue-500" }
                   ].map((activity, index) => (
                     <div key={index} className="flex items-center gap-4 p-4 border-2 border-gray-100 rounded-xl hover:shadow-md hover:border-green-200 transition-all group">
@@ -470,7 +661,7 @@ export default function Community() {
                 </div>
                 <div className="flex justify-between items-center p-3 bg-emerald-50 rounded-xl">
                   <span className="text-gray-700 font-medium">Active Events</span>
-                  <span className="font-bold text-xl bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">24</span>
+                  <span className="font-bold text-xl bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">{allEvents.length}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-teal-50 rounded-xl">
                   <span className="text-gray-700 font-medium">Games This Week</span>
@@ -492,27 +683,36 @@ export default function Community() {
                 </h3>
               </div>
               <div className="p-6 space-y-3">
-                {[
-                  { name: "Weekend Futsal", date: "Tomorrow", status: "Confirmed" },
-                  { name: "Badminton League", date: "Des 12", status: "Pending" }
-                ].map((event, index) => (
-                  <div key={index} className="p-4 border-2 border-gray-100 rounded-xl hover:shadow-md hover:border-green-200 transition-all">
-                    <div className="flex justify-between items-start mb-2">
-                      <p className="font-bold text-gray-800">{event.name}</p>
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${
-                        event.status === 'Confirmed' 
-                          ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
-                          : 'bg-gradient-to-r from-yellow-500 to-amber-500'
-                      }`}>
-                        {event.status}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600 flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-green-500" />
-                      {event.date}
-                    </p>
+                {userCreatedEvents.length === 0 ? (
+                  <div className="text-center py-4">
+                    <p className="text-gray-500">Belum ada event yang dibuat</p>
+                    <button 
+                      onClick={() => handleCreateEvent('tournament')}
+                      className="mt-2 text-green-600 hover:text-green-700 font-medium"
+                    >
+                      Buat event pertama Anda!
+                    </button>
                   </div>
-                ))}
+                ) : (
+                  userCreatedEvents.slice(0, 3).map((event, index) => (
+                    <div key={event.id} className="p-4 border-2 border-green-200 rounded-xl hover:shadow-md hover:border-green-300 transition-all bg-green-50">
+                      <div className="flex justify-between items-start mb-2">
+                        <p className="font-bold text-gray-800">{event.title}</p>
+                        <span className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-xs font-bold">
+                          Creator
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 flex items-center gap-2 mb-2">
+                        <Calendar className="w-4 h-4 text-green-500" />
+                        {event.date}
+                      </p>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-500">{event.participants}/{event.maxParticipants} peserta</span>
+                        <span className="text-green-600 font-semibold">{event.entryFee}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>
