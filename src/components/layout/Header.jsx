@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Home, Heart, Trophy, Users, User, Bell } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Avatar, AvatarFallback } from '../ui/avatar'
+import sepangLogo from '/src/assets/sepang_logo.png'
 
 export default function Header({ activeTab, setActiveTab }) {
   const [showNotifications, setShowNotifications] = useState(false)
@@ -43,7 +44,7 @@ export default function Header({ activeTab, setActiveTab }) {
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl flex items-center justify-center">
                 <img
-                  src="/src/assets/sepang_logo.png"
+                  src={sepangLogo}
                   alt="Sepang Logo"
                   className="w-max h-max object-contain"
                 />
