@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Bell, Calendar, Heart, Star, Trophy, Users, Smartphone, ChevronRight, X } from 'lucide-react'
+import { Bell, Calendar, Heart, Star, Trophy, Users, Smartphone, ChevronRight, X, CreditCard, Shield, HelpCircle, Mail, Phone, MessageCircle, Lock, Eye, EyeOff } from 'lucide-react'
 
 export default function Profile() {
-  // State untuk modal dan data
   const [activeModal, setActiveModal] = useState(null)
   const [userData, setUserData] = useState({
     name: "Frederick Krisna",
@@ -20,15 +19,17 @@ export default function Profile() {
   // Data untuk berbagai fitur
   const [notifications, setNotifications] = useState([
     { id: 1, title: "Booking Confirmed", message: "Your futsal booking at SportCenter is confirmed", time: "2 hours ago", read: false },
-    { id: 2, title: "New Achievement", message: "You earned the Marathon Runner badge", time: "1 day ago", read: false },
+    { id: 2, title: "New Achievement", message: "You earned the 'Early Bird' badge", time: "1 day ago", read: false },
     { id: 3, title: "Payment Received", message: "Your refund has been processed", time: "3 days ago", read: false }
   ])
 
-  const [bookingHistory, setBookingHistory] = useState([
-    { id: 1, venue: "SportCenter Jakarta", sport: "Futsal", date: "2025-10-15", time: "19:00", status: "Completed" },
-    { id: 2, venue: "BadmintonArena Kemang", sport: "Badminton", date: "2025-10-31", time: "20:00", status: "Completed" },
-    { id: 3, venue: "Basketball Court Central", sport: "Basketball", date: "2025-12-1", time: "18:00", status: "Upcoming" }
-  ])
+const [bookingHistory, setBookingHistory] = useState([
+  { id: 1, venue: "SportCenter Jakarta", sport: "Futsal", date: "2025-11-10", time: "19:00", status: "Completed" },
+  { id: 2, venue: "BadmintonArena Kemang", sport: "Badminton", date: "2025-11-12", time: "20:00", status: "Completed" },
+  { id: 3, venue: "Basketball Court Central", sport: "Basketball", date: "2025-11-13", time: "18:00", status: "Completed" },
+  { id: 4, venue: "Tennis Court Senayan", sport: "Tennis", date: "2025-11-18", time: "16:00", status: "Completed" },
+  { id: 5, venue: "Golf Course Bogor", sport: "Golf", date: "2025-12-01", time: "07:00", status: "Upcoming" },
+])
 
   const [favoriteVenues, setFavoriteVenues] = useState([
     { id: 1, name: "SportCenter Jakarta", sport: "Futsal", rating: 4.8 },
@@ -41,15 +42,32 @@ export default function Profile() {
     { id: 2, venue: "BadmintonArena Kemang", rating: 4, comment: "Good courts but a bit crowded", date: "2024-02-28" }
   ])
 
-  const [achievements, setAchievements] = useState([
+  const [achievements] = useState([
     { id: 1, name: "First Win", description: "Win your first match", earned: true, date: "2025-03-15" },
     { id: 1, name: "Weekly Warrior", description: "Play 5 times in one week", earned: true, date: "2025-07-20" },
     { id: 2, name: "Marathon Runner", description: "Play for 50 hours total", earned: true, date: "2025-10-12" },
-    { id: 3, name: "Early Bird", description: "Book before 8 AM", earned: true, date: "2025-11-15" },
+    { id: 3, name: "Early Bird", description: "Book before 8 AM", earned: true, date: "2025-11-18" },
   ])
 
-  // Handler functions
-  const handleEditProfile = () => {
+  const [paymentMethods, setPaymentMethods] = useState([
+    { id: 1, type: "credit-card", last4: "4242", brand: "Visa", expiry: "12/25", isDefault: true },
+    { id: 2, type: "credit-card", last4: "8888", brand: "Mastercard", expiry: "08/24", isDefault: false },
+    { id: 3, type: "e-wallet", brand: "Gopay", phone: "+62 812-3456-7890", isDefault: false }
+  ])
+
+  const [privacySettings, setPrivacySettings] = useState({
+    profileVisibility: "public",
+    activityStatus: true,
+    showEmail: false,
+    showPhone: false,
+    dataSharing: true,
+    marketingEmails: false,
+    twoFactorAuth: false
+  })
+
+  const [showPassword, setShowPassword] = useState(false)
+
+    const handleEditProfile = () => {
     setActiveModal('edit-profile')
   }
 
@@ -80,7 +98,55 @@ export default function Profile() {
     setReviews(reviews.filter(review => review.id !== reviewId))
   }
 
-  // Modal components
+  // Handler untuk modal baru
+  const handleAddPaymentMethod = () => {
+    const newMethod = {
+      id: paymentMethods.length + 1,
+      type: "credit-card",
+      last4: "9999",
+      brand: "Visa",
+      expiry: "12/26",
+      isDefault: false
+    }
+    setPaymentMethods([...paymentMethods, newMethod])
+  }
+
+  const handleSetDefaultPayment = (id) => {
+    setPaymentMethods(paymentMethods.map(method => ({
+      ...method,
+      isDefault: method.id === id
+    })))
+  }
+
+  const handleRemovePaymentMethod = (id) => {
+    setPaymentMethods(paymentMethods.filter(method => method.id !== id))
+  }
+
+  const handlePrivacySettingChange = (setting, value) => {
+    setPrivacySettings({
+      ...privacySettings,
+      [setting]: value
+    })
+  }
+
+  const handleContactSupport = (type) => {
+    switch(type) {
+      case 'email':
+        window.location.href = 'mailto:support@sepang.com'
+        break
+      case 'phone':
+        window.location.href = 'tel:+621500123'
+        break
+      case 'chat':
+        alert('Opening live chat...')
+        break
+      default:
+        break
+    }
+  }
+
+  
+
   const EditProfileModal = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -148,6 +214,316 @@ export default function Profile() {
           >
             Save Changes
           </button>
+        </div>
+      </div>
+    </div>
+  )
+
+  const PrivacySettingsModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              Privacy Settings
+            </h3>
+            <button onClick={() => setActiveModal(null)} className="p-2 hover:bg-gray-100 rounded-lg">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        <div className="p-6 space-y-6">
+          {/* Profile Visibility */}
+          <div>
+            <h4 className="font-semibold mb-4">Profile Visibility</h4>
+            <select 
+              value={privacySettings.profileVisibility}
+              onChange={(e) => handlePrivacySettingChange('profileVisibility', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            >
+              <option value="public">Public - Anyone can see your profile</option>
+              <option value="friends">Friends Only - Only your friends can see your profile</option>
+              <option value="private">Private - Only you can see your profile</option>
+            </select>
+          </div>
+
+          {/* Activity & Privacy */}
+          <div>
+            <h4 className="font-semibold mb-4">Activity & Privacy</h4>
+            <div className="space-y-3">
+              {[
+                { key: 'activityStatus', label: 'Show Activity Status', description: 'Allow others to see when you are active' },
+                { key: 'showEmail', label: 'Show Email Address', description: 'Make your email visible to other users' },
+                { key: 'showPhone', label: 'Show Phone Number', description: 'Make your phone number visible to friends' },
+                { key: 'dataSharing', label: 'Data Sharing for Analytics', description: 'Help us improve by sharing anonymous usage data' },
+                { key: 'marketingEmails', label: 'Marketing Emails', description: 'Receive promotional offers and updates' },
+                { key: 'twoFactorAuth', label: 'Two-Factor Authentication', description: 'Add an extra layer of security to your account' }
+              ].map((setting) => (
+                <label key={setting.key} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900">{setting.label}</p>
+                    <p className="text-sm text-gray-600">{setting.description}</p>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      checked={privacySettings[setting.key]}
+                      onChange={(e) => handlePrivacySettingChange(setting.key, e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-emerald-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Password Change */}
+          <div>
+            <h4 className="font-semibold mb-4">Change Password</h4>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+                <div className="relative">
+                  <input 
+                    type={showPassword ? "text" : "password"}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent pr-10"
+                    placeholder="Enter current password"
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4 text-gray-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
+                  </button>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                <input 
+                  type="password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="Enter new password"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                <input 
+                  type="password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                  placeholder="Confirm new password"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="p-6 border-t flex gap-3">
+          <button 
+            onClick={() => setActiveModal(null)}
+            className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button 
+            onClick={() => setActiveModal(null)}
+            className="flex-1 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+
+  const PaymentMethodsModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <CreditCard className="w-5 h-5" />
+              Payment Methods
+            </h3>
+            <button onClick={() => setActiveModal(null)} className="p-2 hover:bg-gray-100 rounded-lg">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        <div className="p-6 space-y-4">
+          {paymentMethods.map(method => (
+            <div key={method.id} className="p-4 border rounded-lg hover:shadow-md transition-all">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    method.brand === 'Visa' ? 'bg-blue-500' : 
+                    method.brand === 'Mastercard' ? 'bg-red-500' : 
+                    'bg-green-500'
+                  }`}>
+                    <CreditCard className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">
+                      {method.brand} •••• {method.last4}
+                      {method.isDefault && (
+                        <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Default</span>
+                      )}
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      {method.type === 'credit-card' ? `Expires ${method.expiry}` : `Linked to ${method.phone}`}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  {!method.isDefault && (
+                    <button 
+                      onClick={() => handleSetDefaultPayment(method.id)}
+                      className="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                    >
+                      Set Default
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => handleRemovePaymentMethod(method.id)}
+                    className="p-2 hover:bg-red-100 rounded transition-colors"
+                  >
+                    <X className="w-4 h-4 text-red-500" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="p-6 border-t space-y-4">
+          <button 
+            onClick={handleAddPaymentMethod}
+            className="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-600 hover:border-emerald-500 hover:text-emerald-600 transition-colors flex items-center justify-center gap-2"
+          >
+            <CreditCard className="w-5 h-5" />
+            Add New Payment Method
+          </button>
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            <div className="flex items-start gap-3">
+              <Lock className="w-5 h-5 text-blue-600 mt-0.5" />
+              <div>
+                <h4 className="font-semibold text-blue-900 mb-1">Secure Payment</h4>
+                <p className="text-blue-700 text-sm">
+                  Your payment information is encrypted and secure. We use industry-standard security measures to protect your data.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const SupportHelpModal = () => (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <HelpCircle className="w-5 h-5" />
+              Support & Help
+            </h3>
+            <button onClick={() => setActiveModal(null)} className="p-2 hover:bg-gray-100 rounded-lg">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        <div className="p-6 space-y-6">
+          {/* Contact Options */}
+          <div>
+            <h4 className="font-semibold mb-4">Get Help Quickly</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <button 
+                onClick={() => handleContactSupport('chat')}
+                className="p-4 border-2 border-gray-200 rounded-xl hover:shadow-md transition-all hover:border-emerald-300 text-center group bg-white"
+              >
+                <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <MessageCircle className="w-6 h-6 text-emerald-600" />
+                </div>
+                <p className="font-semibold text-gray-900">Live Chat</p>
+                <p className="text-sm text-gray-600 mt-1">24/7 Support</p>
+              </button>
+              <button 
+                onClick={() => handleContactSupport('email')}
+                className="p-4 border-2 border-gray-200 rounded-xl hover:shadow-md transition-all hover:border-blue-300 text-center group bg-white"
+              >
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <Mail className="w-6 h-6 text-blue-600" />
+                </div>
+                <p className="font-semibold text-gray-900">Email Us</p>
+                <p className="text-sm text-gray-600 mt-1">Within 24 hours</p>
+              </button>
+              <button 
+                onClick={() => handleContactSupport('phone')}
+                className="p-4 border-2 border-gray-200 rounded-xl hover:shadow-md transition-all hover:border-green-300 text-center group bg-white"
+              >
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                  <Phone className="w-6 h-6 text-green-600" />
+                </div>
+                <p className="font-semibold text-gray-900">Call Us</p>
+                <p className="text-sm text-gray-600 mt-1">Mon-Fri, 9AM-6PM</p>
+              </button>
+            </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div>
+            <h4 className="font-semibold mb-4">Frequently Asked Questions</h4>
+            <div className="space-y-3">
+              {[
+                { 
+                  question: "How do I cancel a booking?", 
+                  answer: "You can cancel bookings from the Booking History section up to 2 hours before the scheduled time. Refunds are processed within 3-5 business days." 
+                },
+                { 
+                  question: "What's your refund policy?", 
+                  answer: "Full refund for cancellations made 24 hours in advance. 50% refund for cancellations within 24 hours. No refund for cancellations less than 2 hours before the booking." 
+                },
+                { 
+                  question: "How do I change my membership?", 
+                  answer: "Go to Edit Profile to upgrade or downgrade your membership plan. Changes take effect immediately and are prorated based on your billing cycle." 
+                },
+                { 
+                  question: "Can I transfer my booking to someone else?", 
+                  answer: "Yes, you can transfer bookings to other SePang users through the Booking Details page. Transfers must be completed at least 1 hour before the scheduled time." 
+                }
+              ].map((faq, index) => (
+                <div key={index} className="p-4 border-2 border-gray-100 rounded-xl hover:shadow-md transition-all hover:border-emerald-200 bg-white">
+                  <h5 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                    {faq.question}
+                  </h5>
+                  <p className="text-sm text-gray-600 leading-relaxed">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Help Resources */}
+          <div>
+            <h4 className="font-semibold mb-4">Help Resources</h4>
+            <div className="space-y-2">
+              {[
+                { name: "User Guide & Tutorials", description: "Complete guide to using SePang" },
+                { name: "Community Forum", description: "Connect with other sports enthusiasts" },
+                { name: "Video Tutorials", description: "Step-by-step video guides" },
+                { name: "Booking Tips", description: "Best practices for booking venues" }
+              ].map((resource, index) => (
+                <button 
+                  key={index}
+                  className="w-full text-left p-4 border-2 border-gray-100 rounded-xl hover:shadow-md hover:border-emerald-200 transition-all bg-white"
+                >
+                  <p className="font-medium text-gray-900">{resource.name}</p>
+                  <p className="text-sm text-gray-600 mt-1">{resource.description}</p>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -414,7 +790,6 @@ export default function Profile() {
     </div>
   )
 
-  // Menu items dengan handler
   const menuItems = [
     { 
       icon: Bell, 
@@ -559,7 +934,7 @@ export default function Profile() {
                 <div className="space-y-3">
                   {[
                     { action: "Booked Futsal at SportCenter Jakarta", time: "2 hours ago", icon: Calendar, color: "from-blue-500 to-cyan-500" },
-                    { action: "Earned 'Weekly Warrior' achievement", time: "1 day ago", icon: Trophy, color: "from-yellow-500 to-orange-500" },
+                    { action: "Earned 'Early Bird' achievement", time: "1 day ago", icon: Trophy, color: "from-yellow-500 to-orange-500" },
                     { action: "Rated BadmintonArena Kemang (5 stars)", time: "2 days ago", icon: Star, color: "from-purple-500 to-pink-500" },
                     { action: "Joined Liga Futsal Mingguan", time: "3 days ago", icon: Users, color: "from-emerald-500 to-teal-500" }
                   ].map((activity, index) => {
@@ -650,13 +1025,25 @@ export default function Profile() {
                 </h3>
               </div>
               <div className="space-y-3 p-6">
-                <button className="w-full px-4 py-3 border rounded-lg text-left hover:bg-gray-50 transition-colors font-medium">
+                <button 
+                  onClick={() => setActiveModal('privacy-settings')}
+                  className="w-full px-4 py-3 border rounded-lg text-left hover:bg-gray-50 transition-colors font-medium flex items-center gap-3"
+                >
+                  <Shield className="w-5 h-5 text-gray-400" />
                   Privacy Settings
                 </button>
-                <button className="w-full px-4 py-3 border rounded-lg text-left hover:bg-gray-50 transition-colors font-medium">
+                <button 
+                  onClick={() => setActiveModal('payment-methods')}
+                  className="w-full px-4 py-3 border rounded-lg text-left hover:bg-gray-50 transition-colors font-medium flex items-center gap-3"
+                >
+                  <CreditCard className="w-5 h-5 text-gray-400" />
                   Payment Methods
                 </button>
-                <button className="w-full px-4 py-3 border rounded-lg text-left hover:bg-gray-50 transition-colors font-medium">
+                <button 
+                  onClick={() => setActiveModal('support-help')}
+                  className="w-full px-4 py-3 border rounded-lg text-left hover:bg-gray-50 transition-colors font-medium flex items-center gap-3"
+                >
+                  <HelpCircle className="w-5 h-5 text-gray-400" />
                   Support & Help
                 </button>
                 <button className="w-full px-4 py-3 border border-red-200 rounded-lg text-left hover:bg-red-50 transition-colors text-red-600 font-medium">
@@ -676,6 +1063,9 @@ export default function Profile() {
       {activeModal === 'my-reviews' && <MyReviewsModal />}
       {activeModal === 'achievements' && <AchievementsModal />}
       {activeModal === 'app-settings' && <AppSettingsModal />}
+      {activeModal === 'privacy-settings' && <PrivacySettingsModal />}
+      {activeModal === 'payment-methods' && <PaymentMethodsModal />}
+      {activeModal === 'support-help' && <SupportHelpModal />}
     </div>
   )
 }
