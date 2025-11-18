@@ -17,9 +17,9 @@ export default function Header({ activeTab, setActiveTab }) {
   ]
 
   const notifications = [
-    { id: 1, message: 'Booking lapangan futsal kamu sudah dikonfirmasi ✅', time: '2 jam lalu' },
-    { id: 2, message: 'Kamu mendapatkan 50 poin reward baru 🎁', time: '1 hari lalu' },
-    { id: 3, message: 'Temanmu mengundangmu ke pertandingan ⚽', time: '3 hari lalu' }
+    { id: 1, message: 'Your futsal booking at SportCenter is confirmed', time: '2 hours ago' },
+    { id: 2, message: 'You earned the Marathon Runner badge', time: '1 day ago' },
+    { id: 3, message: 'Your refund has been processed', time: '3 days ago' }
   ]
 
   // Tutup popup kalau klik di luar

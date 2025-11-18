@@ -20,14 +20,14 @@ export default function Profile() {
   // Data untuk berbagai fitur
   const [notifications, setNotifications] = useState([
     { id: 1, title: "Booking Confirmed", message: "Your futsal booking at SportCenter is confirmed", time: "2 hours ago", read: false },
-    { id: 2, title: "New Achievement", message: "You earned the Weekly Warrior badge", time: "1 day ago", read: false },
+    { id: 2, title: "New Achievement", message: "You earned the Marathon Runner badge", time: "1 day ago", read: false },
     { id: 3, title: "Payment Received", message: "Your refund has been processed", time: "3 days ago", read: false }
   ])
 
   const [bookingHistory, setBookingHistory] = useState([
-    { id: 1, venue: "SportCenter Jakarta", sport: "Futsal", date: "2024-03-15", time: "19:00", status: "Completed" },
-    { id: 2, venue: "BadmintonArena Kemang", sport: "Badminton", date: "2024-03-12", time: "20:00", status: "Completed" },
-    { id: 3, venue: "Basketball Court Central", sport: "Basketball", date: "2024-03-20", time: "18:00", status: "Upcoming" }
+    { id: 1, venue: "SportCenter Jakarta", sport: "Futsal", date: "2025-10-15", time: "19:00", status: "Completed" },
+    { id: 2, venue: "BadmintonArena Kemang", sport: "Badminton", date: "2025-10-31", time: "20:00", status: "Completed" },
+    { id: 3, venue: "Basketball Court Central", sport: "Basketball", date: "2025-12-1", time: "18:00", status: "Upcoming" }
   ])
 
   const [favoriteVenues, setFavoriteVenues] = useState([
@@ -42,9 +42,10 @@ export default function Profile() {
   ])
 
   const [achievements, setAchievements] = useState([
-    { id: 1, name: "Weekly Warrior", description: "Play 5 times in one week", earned: true, date: "2024-03-15" },
-    { id: 2, name: "Early Bird", description: "Book before 8 AM", earned: true, date: "2024-03-10" },
-    { id: 3, name: "Social Butterfly", description: "Play with 10 different people", earned: false }
+    { id: 1, name: "First Win", description: "Win your first match", earned: true, date: "2025-03-15" },
+    { id: 1, name: "Weekly Warrior", description: "Play 5 times in one week", earned: true, date: "2025-07-20" },
+    { id: 2, name: "Marathon Runner", description: "Play for 50 hours total", earned: true, date: "2025-10-12" },
+    { id: 3, name: "Early Bird", description: "Book before 8 AM", earned: true, date: "2025-11-15" },
   ])
 
   // Handler functions

@@ -19,11 +19,13 @@ export default function Gamification() {
 
   const achievements = [
     { id: 1, name: "First Win", icon: "Trophy", points: 50, description: "Win your first match", completed: true, progress: 100 },
-    { id: 2, name: "Speed Demon", icon: "Zap", points: 100, description: "Complete 10 matches in a week", completed: false, progress: 60 },
-    { id: 3, name: "Social Butterfly", icon: "Users", points: 75, description: "Play with 5 different friends", completed: false, progress: 40 },
-    { id: 4, name: "Marathon Runner", icon: "Medal", points: 150, description: "Play for 50 hours total", completed: true, progress: 100 },
-    { id: 5, name: "Sharpshooter", icon: "Target", points: 200, description: "Win 20 matches in a row", completed: false, progress: 25 },
-    { id: 6, name: "Team Player", icon: "Star", points: 100, description: "Join 10 team events", completed: false, progress: 70 }
+    { id: 2, name: "Weekly Warrior", icon: "Trophy", points: 50, description: "Play 5 times in one week", completed: true, progress: 100 },
+    { id: 3, name: "Speed Demon", icon: "Zap", points: 100, description: "Complete 10 matches in a week", completed: false, progress: 60 },
+    { id: 4, name: "Social Butterfly", icon: "Users", points: 75, description: "Play with 10 different friends", completed: false, progress: 40 },
+    { id: 5, name: "Marathon Runner", icon: "Medal", points: 150, description: "Play for 50 hours total", completed: true, progress: 100 },
+    { id: 6, name: "Sharpshooter", icon: "Target", points: 200, description: "Win 20 matches in a row", completed: false, progress: 25 },
+    { id: 7, name: "Team Player", icon: "Star", points: 100, description: "Join 10 team events", completed: false, progress: 70 },
+    { id: 8, name: "Early Bird", icon: "Award", points: 50, description: "Book before 8 AM", completed: true, progress: 100 }
   ]
 
   const rewards = [
