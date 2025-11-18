@@ -1,18 +1,233 @@
 import React, { useState, useRef, useEffect } from "react"
 import PreferencesEditor from "../components/MatchingPreference/PreferencesEditor"
-import { MessageCircle, User, Zap, Trophy, Calendar, MapPin, Star } from 'lucide-react'
+import { MessageCircle, User, Zap, Trophy, Calendar, MapPin, Star, X, Clock, Award, Users, Activity, Phone, Mail, Heart, Shield, Target } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar'
 import { matchProfiles } from '../data/mockData'
 
-// ChatModal Component
+// ProfileModal Component - TANPA tombol chat di dalamnya
+function ProfileModal({ open, onClose, profile, onStartChat }) {
+  if (!open || !profile) return null
+
+  return (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border-0">
+        {/* Header */}
+        <div className="p-6 border-b bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-t-2xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Avatar className="w-20 h-20 border-4 border-white/20">
+                <AvatarImage src={profile.avatar} />
+                <AvatarFallback className="text-2xl bg-gradient-to-br from-yellow-400 to-amber-400 text-white">
+                  {profile.name[0]}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="font-bold text-2xl">{profile.name}, {profile.age}</h3>
+                <p className="text-green-100 text-lg">{profile.sport} • {profile.level}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge className="bg-gradient-to-r from-yellow-400 to-amber-400 text-white border-0">
+                    {profile.matchScore}% Match
+                  </Badge>
+                  <span className="text-green-100 text-sm">• {profile.lastActive}</span>
+                </div>
+              </div>
+            </div>
+            <button 
+              onClick={onClose}
+              className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center transition-colors backdrop-blur-sm"
+            >
+              <X className="w-5 h-5 text-white" />
+            </button>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 space-y-6">
+          {/* Bio Section */}
+          <div>
+            <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+              <User className="w-5 h-5 text-green-500" />
+              Tentang
+            </h4>
+            <p className="text-gray-600 bg-green-50 rounded-xl p-4 border border-green-200">
+              {profile.bio}
+            </p>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-blue-50 rounded-xl p-4 text-center border border-blue-200">
+              <Activity className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+              <p className="text-sm text-gray-600">Level</p>
+              <p className="font-bold text-blue-600">{profile.level}</p>
+            </div>
+            <div className="bg-purple-50 rounded-xl p-4 text-center border border-purple-200">
+              <Award className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+              <p className="text-sm text-gray-600">Pengalaman</p>
+              <p className="font-bold text-purple-600">{profile.experience}</p>
+            </div>
+            <div className="bg-orange-50 rounded-xl p-4 text-center border border-orange-200">
+              <Star className="w-6 h-6 text-orange-500 mx-auto mb-2" />
+              <p className="text-sm text-gray-600">Rating</p>
+              <p className="font-bold text-orange-600">{profile.rating}/5.0</p>
+            </div>
+            <div className="bg-green-50 rounded-xl p-4 text-center border border-green-200">
+              <Users className="w-6 h-6 text-green-500 mx-auto mb-2" />
+              <p className="text-sm text-gray-600">Reviews</p>
+              <p className="font-bold text-green-600">{profile.reviewCount}</p>
+            </div>
+          </div>
+
+          {/* Skills & Play Style */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+                <Target className="w-5 h-5 text-red-500" />
+                Keahlian
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {profile.skills.map((skill, index) => (
+                  <Badge 
+                    key={index} 
+                    className="py-2 px-3 bg-red-50 text-red-700 border-red-200 font-medium"
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-indigo-500" />
+                Gaya Bermain
+              </h4>
+              <Badge className="py-2 px-4 bg-indigo-100 text-indigo-700 border-indigo-200 font-medium">
+                {profile.playStyle}
+              </Badge>
+            </div>
+          </div>
+
+          {/* Location & Availability */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+                <MapPin className="w-5 h-5 text-red-500" />
+                Lokasi & Kontak
+              </h4>
+              <div className="space-y-3">
+                <div className="bg-red-50 rounded-xl p-4 border border-red-200">
+                  <p className="font-medium text-gray-700">{profile.location}</p>
+                  <p className="text-sm text-gray-600 mt-1">{profile.distance} dari Anda</p>
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="outline" className="flex-1 border-gray-300">
+                    <Phone className="w-4 h-4 mr-2" />
+                    Call
+                  </Button>
+                  <Button variant="outline" className="flex-1 border-gray-300">
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-orange-500" />
+                Ketersediaan
+              </h4>
+              <div className="bg-orange-50 rounded-xl p-4 border border-orange-200">
+                <p className="font-medium text-gray-700 mb-2">Hari Tersedia:</p>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {profile.availability.map((day, index) => (
+                    <Badge key={index} className="bg-orange-100 text-orange-700 border-orange-200">
+                      {day}
+                    </Badge>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Waktu:</span> {profile.preferredTime}
+                </p>
+                <p className="text-sm text-gray-600">
+                  <span className="font-medium">Frekuensi:</span> {profile.playingFrequency}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+                <Heart className="w-5 h-5 text-pink-500" />
+                Olahraga Favorit
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {profile.preferredSports.map((sport, index) => (
+                  <Badge 
+                    key={index} 
+                    className="py-2 px-3 bg-pink-50 text-pink-700 border-pink-200 font-medium"
+                  >
+                    {sport}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-yellow-500" />
+                Prestasi
+              </h4>
+              <div className="space-y-2">
+                {profile.achievements.map((achievement, index) => (
+                  <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                    {achievement}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Favorite Venues */}
+          <div>
+            <h4 className="font-bold text-lg mb-3 text-gray-800 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-green-500" />
+              Venue Favorit
+            </h4>
+            <div className="grid grid-cols-1 gap-2">
+              {profile.favoriteVenues.map((venue, index) => (
+                <div key={index} className="bg-green-50 rounded-xl p-3 border border-green-200">
+                  <p className="font-medium text-gray-700">{venue}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action Buttons - HANYA tombol Tutup */}
+          <div className="flex gap-3 pt-4 border-t">
+            <Button 
+              variant="outline" 
+              className="flex-1 border-2 border-green-300 hover:border-green-400 hover:bg-green-50 transition-all rounded-xl py-3"
+              onClick={onClose}
+            >
+              Tutup
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ChatModal Component - SUDAH ADA (tetap sama)
 function ChatModal({ open, onClose, match, messages, onSendMessage }) {
   const [inputMessage, setInputMessage] = useState('')
   const messagesEndRef = useRef(null)
 
-  // Auto scroll ke bawah ketika ada pesan baru
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
@@ -21,15 +236,12 @@ function ChatModal({ open, onClose, match, messages, onSendMessage }) {
     scrollToBottom()
   }, [messages])
 
-  // Function untuk kirim pesan
   const sendMessage = () => {
     if (inputMessage.trim() === '') return
-
     onSendMessage(inputMessage)
     setInputMessage('')
   }
 
-  // Function untuk handle Enter key
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
@@ -37,7 +249,6 @@ function ChatModal({ open, onClose, match, messages, onSendMessage }) {
     }
   }
 
-  // Format waktu
   const formatTime = (timestamp) => {
     return new Date(timestamp).toLocaleTimeString('id-ID', {
       hour: '2-digit',
@@ -139,12 +350,12 @@ function ChatModal({ open, onClose, match, messages, onSendMessage }) {
 // Main Matchmaking Component
 export default function Matchmaking() {
   const [chatOpen, setChatOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
   const [selectedMatch, setSelectedMatch] = useState(null)
+  const [selectedProfile, setSelectedProfile] = useState(null)
   const [selectedSports, setSelectedSports] = useState(["Futsal", "Badminton", "Basketball"])
   const [selectedLevel, setSelectedLevel] = useState("intermediate")
   const [maxDistance, setMaxDistance] = useState(5)
-  
-  // State untuk simpan semua chat history per user
   const [chatHistories, setChatHistories] = useState({})
 
   const formatDistance = (km) => {
@@ -159,13 +370,18 @@ export default function Matchmaking() {
     setSelectedMatch(match)
     setChatOpen(true)
     
-    // Initialize chat history kalo belum ada
     if (!chatHistories[match.id]) {
       setChatHistories(prev => ({
         ...prev,
         [match.id]: []
       }))
     }
+  }
+
+  const openProfile = (profile) => {
+    console.log('opening profile:', profile.name)
+    setSelectedProfile(profile)
+    setProfileOpen(true)
   }
 
   const handleSendMessage = (messageText) => {
@@ -178,13 +394,11 @@ export default function Matchmaking() {
       isUser: true
     }
 
-    // Update chat history untuk user yang sedang dipilih
     setChatHistories(prev => ({
       ...prev,
       [selectedMatch.id]: [...(prev[selectedMatch.id] || []), newMessage]
     }))
 
-    // Auto reply dari match setelah 1 detik
     setTimeout(() => {
       const autoReply = {
         id: Date.now() + 1,
@@ -200,11 +414,6 @@ export default function Matchmaking() {
     }, 1000)
   }
 
-  const viewProfile = (match) => {
-    window.location.href = `/profile/${match.id}`
-  }
-
-  // Dapatkan messages untuk user yang sedang dipilih
   const currentMessages = selectedMatch ? chatHistories[selectedMatch.id] || [] : []
 
   return (
@@ -247,15 +456,15 @@ export default function Matchmaking() {
                   <p className="text-gray-600 mb-3 text-lg font-medium">{matchProfiles[0].sport} • {selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)}</p>
                   <p className="text-gray-500 mb-4 flex items-center justify-center gap-2">
                     <MapPin className="w-4 h-4" />
-                    Jakarta Barat • {formatDistance(2.5)} dari Anda
+                    {matchProfiles[0].location} • {matchProfiles[0].distance} dari Anda
                   </p>
-                  <p className="mb-6 text-gray-700 text-lg italic">"Play hard, stay humble. Because when you trust the pass, you trust the team!"</p>
+                  <p className="mb-6 text-gray-700 text-lg italic">"{matchProfiles[0].bio}"</p>
                   <div className="flex gap-4 justify-center">
                     <Button 
                       variant="outline" 
                       size="lg" 
                       className="rounded-xl px-8 py-3 border-2 border-green-300 hover:border-green-400 hover:bg-green-50 transition-all"
-                      onClick={() => viewProfile(matchProfiles[0])}
+                      onClick={() => openProfile(matchProfiles[0])}
                     >
                       <User className="w-6 h-6 mr-2" />
                       Lihat Detail
@@ -291,99 +500,25 @@ export default function Matchmaking() {
                         </AvatarFallback>
                       </Avatar>
                       <h4 className="text-lg font-bold mb-1">{profile.name}</h4>
-                      <p className="text-gray-600 mb-2">{profile.sport} • {selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)}</p>
+                      <p className="text-gray-600 mb-2">{profile.sport} • {profile.level}</p>
                       <Badge className="mb-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
                         {profile.matchScore}% Match
                       </Badge>
                       <p className="text-sm text-gray-500 mb-4 flex items-center justify-center gap-1">
                         <MapPin className="w-3 h-3" />
-                        Jakarta
+                        {profile.location} • {profile.distance}
                       </p>
-                      <Button 
-                        variant="outline" 
-                        className="w-full border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-all"
-                        onClick={() => viewProfile(profile)}
-                      >
-                        Lihat Profile
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-                
-                {[
-                  { 
-                    id: "kael-1",
-                    name: "Kael", 
-                    sport: "Badminton", 
-                    date: "21 Nov 2024", 
-                    day: "Jumat", 
-                    time: "19:00 WIB",
-                    matchScore: 78,
-                    avatar: null
-                  },
-                  { 
-                    id: "edward-1",
-                    name: "Edward", 
-                    sport: "Futsal", 
-                    date: "22 Nov 2024", 
-                    day: "Sabtu", 
-                    time: "16:30 WIB",
-                    matchScore: 85,
-                    avatar: null
-                  },
-                  { 
-                    id: "dustin-1", 
-                    name: "Dustin", 
-                    sport: "Basketball", 
-                    date: "23 Nov 2024", 
-                    day: "Minggu", 
-                    time: "14:00 WIB",
-                    matchScore: 72,
-                    avatar: null
-                  },
-                ].map((match) => (
-                  <Card key={match.id} className="text-center hover:shadow-xl transition-all duration-300 cursor-pointer border-2 border-green-200 rounded-2xl">
-                    <CardContent className="p-6">
-                      <div className="mb-6">
-                        <Avatar className="w-20 h-20 mx-auto border-4 border-green-100">
-                          {match.avatar ? (
-                            <AvatarImage src={match.avatar} />
-                          ) : (
-                            <AvatarFallback className="text-lg bg-gradient-to-br from-green-500 to-emerald-500 text-white">
-                              {match.name[0]}
-                            </AvatarFallback>
-                          )}
-                        </Avatar>
-                      </div>
-                      
-                      <h4 className="text-lg font-bold mb-1">{match.name}</h4>
-                      <p className="text-gray-600 mb-2">{match.sport} • Intermediate</p>
-                      <Badge className="mb-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                        {match.matchScore}% Match
-                      </Badge>
-                      
-                      <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 mb-4 border border-green-200">
-                        <p className="text-sm font-bold text-green-800">{match.day}</p>
-                        <p className="text-sm text-green-600">{match.date}</p>
-                        <p className="text-sm font-semibold text-green-800">{match.time}</p>
-                      </div>
-                      
-                      <p className="text-sm text-gray-500 mb-4 flex items-center justify-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        Jakarta
-                      </p>
-                      
                       <div className="space-y-3">
                         <Button 
                           variant="outline" 
                           className="w-full border-green-300 text-green-600 hover:bg-green-50 hover:border-green-400 transition-all"
-                          onClick={() => viewProfile(match)}
+                          onClick={() => openProfile(profile)}
                         >
-                          Lihat Detail
+                          Lihat Profile
                         </Button>
                         <Button 
                           className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl transition-all"
-                          onClick={() => openChatWithMatch(match)}
+                          onClick={() => openChatWithMatch(profile)}
                         >
                           <MessageCircle className="w-4 h-4 mr-2" />
                           Chat
@@ -445,7 +580,7 @@ export default function Matchmaking() {
               <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b">
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-green-500" />
-                  Recent Matches
+                  Pertandingan Sebelumnya
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 mt-4 space-y-4">
@@ -485,27 +620,36 @@ export default function Matchmaking() {
               <CardHeader className="bg-gradient-to-r from-gray-50 to-white border-b">
                 <CardTitle className="flex items-center gap-2">
                   <Star className="w-5 h-5 text-yellow-500" />
-                  Match Stats
+                  Statistika
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-6 mt-4 space-y-4">
                 <div className="flex justify-between items-center p-3 bg-green-50 rounded-xl">
-                  <span className="text-gray-700 font-medium">Total Matches</span>
+                  <span className="text-gray-700 font-medium">Total Pertandingan</span>
                   <span className="text-2xl font-bold text-green-600">24</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-blue-50 rounded-xl">
-                  <span className="text-gray-700 font-medium">Success Rate</span>
+                  <span className="text-gray-700 font-medium">Persentase Kemenangan</span>
                   <span className="text-2xl font-bold text-blue-600">85%</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-purple-50 rounded-xl">
-                  <span className="text-gray-700 font-medium">Avg. Match Score</span>
+                  <span className="text-gray-700 font-medium">Rata-Rata Score Pertandingan</span>
                   <span className="text-2xl font-bold text-purple-600">78%</span>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Chat Modal */}
+          {/* Modals */}
+          <ProfileModal 
+            open={profileOpen} 
+            onClose={() => {
+              setProfileOpen(false)
+              setSelectedProfile(null)
+            }} 
+            profile={selectedProfile}
+          />
+
           <ChatModal 
             open={chatOpen} 
             onClose={() => {
