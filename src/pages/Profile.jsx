@@ -38,8 +38,8 @@ const [bookingHistory, setBookingHistory] = useState([
   ])
 
   const [reviews, setReviews] = useState([
-    { id: 1, venue: "SportCenter Jakarta", rating: 5, comment: "Great facilities and friendly staff!", date: "2024-03-10" },
-    { id: 2, venue: "BadmintonArena Kemang", rating: 4, comment: "Good courts but a bit crowded", date: "2024-02-28" }
+    { id: 1, venue: "SportCenter Jakarta", rating: 4, comment: "Great facilities and friendly staff!", date: "2025-11-10" },
+    { id: 2, venue: "BadmintonArena Kemang", rating: 5, comment: "Good courts but a bit crowded", date: "2025-11-17" }
   ])
 
   const [achievements] = useState([
